@@ -22,15 +22,16 @@ ERR = 200  # Error léxico: palabra desconocida
 # Estados > 99 son finales (ACEPTORES)
 # Caso especial: Estado 200 = ERROR
 #      dig   op   (    )  raro  esp  .   $    ?:   =    <    >    !    ID
-MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   7,   8], # edo 0 - estado inicial
+MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   7,   9], # edo 0 - estado inicial
       [  1, INT, INT, INT, INT, INT, 2, INT, INT, INT, INT, INT, INT, INT], # edo 1 - dígitos enteros
       [  3, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR, ERR, ERR, ERR], # edo 2 - primer decimal flotante
       [  3, FLT, FLT, FLT, FLT, FLT, 4, FLT, FLT, FLT, FLT, FLT, FLT, FLT], # edo 3 - decimales restantes flotante
       [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR, ERR, ERR, ERR], # edo 4 - estado de error
-      [OPA, ERR, ERR, ERR, ERR, OPA, 4, ERR, ERR,   6, ERR, ERR, ERR, OPA], # edo 5 - primer = 
-      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR, ERR, ERR, ERR, ERR, OPR],  # edo 6 - segundo =
-      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR, OPR, ERR, ERR, ERR, OPR], # edo 7 - operador relacional
-      [ERR, IDE, IDE, IDE, IDE, IDE, 4, IDE, IDE, IDE, IDE, IDE, IDE,   8]] # edo 8  - identificador
+      [OPA, ERR, ERR, ERR, ERR, OPA, 4, ERR, ERR,   6, ERR, ERR, OPA, OPA], # edo 5 - primer = 
+      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR, ERR, ERR, ERR, ERR, OPR], # edo 6 - segundo =
+      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR,   8, ERR, ERR, ERR, OPR], # edo 7 - primer operador relacional
+      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR, OPR, ERR, ERR, ERR, OPR], # edo 8 - operador relacional
+      [ERR, IDE, IDE, IDE, IDE, IDE, 4, IDE, IDE, IDE, IDE, IDE, IDE,   9]] # edo 9  - identificador
 
 # Filtro de caracteres: regresa el número de columna de la matriz de transiciones
 # de acuerdo al caracter dado
