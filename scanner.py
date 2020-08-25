@@ -1,6 +1,6 @@
 # Implementación de un scanner mediante la codificación de un Autómata
 # Finito Determinista como una Matríz de Transiciones
-# Autor: Dr. Santiago Conant, Agosto 2014 (modificado en Agosto 2015)
+# Autores: Luis Alberto Caballero Noguez A01282700, Edgar Rubén Salazar Lugo A01338798, Diego Alejandro Villarreal Lopez A01282555
 
 import sys
 
@@ -21,17 +21,18 @@ ERR = 200  # Error léxico: palabra desconocida
 # [renglón, columna] = [estado no final, transición]
 # Estados > 99 son finales (ACEPTORES)
 # Caso especial: Estado 200 = ERROR
-#      dig   op   (    )  raro  esp  .   $    ?:   =    <    >    !    ID
-MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   7,   8], # edo 0 - estado inicial
+#      dig   op   (    )  raro  esp  .   $    ?:    =    <    >    !   ID
+MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   10,   9], # edo 0 - estado inicial
       [  1, INT, INT, INT, INT, INT, 2, INT, INT, INT, INT, INT, INT, INT], # edo 1 - dígitos enteros
       [  3, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR, ERR, ERR, ERR], # edo 2 - primer decimal flotante
       [  3, FLT, FLT, FLT, FLT, FLT, 4, FLT, FLT, FLT, FLT, FLT, FLT, FLT], # edo 3 - decimales restantes flotante
       [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR, ERR, ERR, ERR], # edo 4 - estado de error
-      [OPA, ERR, ERR, ERR, ERR, OPA, 4, ERR, ERR,   6, ERR, ERR, ERR, OPA], # edo 5 - primer = 
-      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR, ERR, ERR, ERR, ERR, OPR],  # edo 6 - segundo =
-      [OPR, ERR, OPR, ERR,   4, OPR, 4, ERR, ERR, OPR, ERR, ERR, ERR, OPR], # edo 7 - operador relacional
-      [ERR, IDE, IDE, IDE, IDE, IDE, 4, IDE, IDE, IDE, IDE, IDE, IDE,   8]] # edo 8  - identificador
-
+      [OPA, ERR, OPA, ERR, ERR, OPA, 4, ERR, ERR,   6, ERR, ERR, ERR, OPA], # edo 5 - primer =
+      [OPR, ERR, OPR, ERR,   4, OPR, 4, OPR, ERR, ERR, ERR, ERR, ERR, OPR], # edo 6 - segundo =
+      [OPR, ERR, OPR, ERR,   4, OPR, 4, OPR, ERR,   8, ERR, ERR, ERR, OPR], # edo 7 - primero operador operacional
+      [OPR, ERR, OPR, ERR,   4, OPR, 4, OPR, ERR, ERR, ERR, ERR, ERR, OPR], # edo 8 - operador relacional
+      [ERR, IDE, IDE, IDE,   4, IDE, 4, IDE, IDE, IDE, IDE, IDE, IDE,   9], # edo 9 - identificador
+      [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, OPR, ERR, ERR, ERR, ERR]] # edo 10 - !=
 # Filtro de caracteres: regresa el número de columna de la matriz de transiciones
 # de acuerdo al caracter dado
 def filtro(c):
@@ -53,9 +54,9 @@ def filtro(c):
         return 6
     elif c == '$': # fin de entrada
         return 7
-    elif c == '?' or c == ':': # operador condicional
+    elif c == '?' or c == ':': # operadores condicionales
         return 8
-    elif c == '=': # operador de asignación
+    elif c == '=': # operador relacional
         return 9
     elif c == '<': # operador relacional
         return 10
@@ -79,12 +80,8 @@ def scanner():
         while edo < 100:    # mientras el estado no sea ACEPTOR ni ERROR
             if leer: c = sys.stdin.read(1)
             else: leer = True
-            # print(f"C ID +{c}+")
-            # print(f"EL FILTRO DE C IS {filtro(c)}")
             edo = MT[edo][filtro(c)]
-            # print(f"EDDO IS {edo}")
             if edo < 100 and edo != 0: lexema += c
-        print(f"LEXEMA +{lexema}+")
         if edo == INT:    
             leer = False # ya se leyó el siguiente caracter
             print("Entero", lexema)
@@ -103,26 +100,23 @@ def scanner():
         elif edo == ERR:   
             leer = False # el último caracter no es raro
             print("ERROR! palabra ilegal", lexema)
-        elif edo == IDE: 
-            # lexema += c  # el último caracter forma el lexema
+        elif edo == OPC:
+            lexema += c 
+            print("Operador condicional ", lexema)
+        elif edo == OPA:
             leer = False
-            print("IDENTIFICADOR", lexema)
-        elif edo == OPC: 
-            # leer = False
-            lexema += c  # el último caracter forma el lexema
-            print("Operador condicional", lexema)
-        elif edo == OPA: 
-            # lexema += c  # el último caracter forma el lexema
+            print("Operador asignación ", lexema)
+        elif edo == OPR:
+            lexema += c 
+            print("Operador relacional ", lexema)
+        elif edo == IDE:
             leer = False
-            print("Operador de asignación", lexema)
-        elif edo == OPR: 
-            leer = False
-            # lexema += c  # el último caracter forma el lexema
-            print("Operador relacional", lexema)
+            print("Identificador ", lexema)
         tokens.append(edo)
         if edo == END: return tokens
         lexema = ""
         edo = 0
             
-        
 scanner()
+    
+
