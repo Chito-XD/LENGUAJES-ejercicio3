@@ -22,7 +22,7 @@ ERR = 200  # Error léxico: palabra desconocida
 # Estados > 99 son finales (ACEPTORES)
 # Caso especial: Estado 200 = ERROR
 #      dig   op   (    )  raro  esp  .   $    ?:    =    <    >    !   ID
-MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   10,   9], # edo 0 - estado inicial
+MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   10,  9], # edo 0 - estado inicial
       [  1, INT, INT, INT, INT, INT, 2, INT, INT, INT, INT, INT, INT, INT], # edo 1 - dígitos enteros
       [  3, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, ERR, ERR, ERR, ERR, ERR], # edo 2 - primer decimal flotante
       [  3, FLT, FLT, FLT, FLT, FLT, 4, FLT, FLT, FLT, FLT, FLT, FLT, FLT], # edo 3 - decimales restantes flotante
@@ -31,7 +31,7 @@ MT = [[  1, OPB, LRP, RRP,   4,   0, 4, END, OPC,   5,   7,   7,   10,   9], # e
       [OPR, ERR, OPR, ERR,   4, OPR, 4, OPR, ERR, ERR, ERR, ERR, ERR, OPR], # edo 6 - segundo =
       [OPR, ERR, OPR, ERR,   4, OPR, 4, OPR, ERR,   8, ERR, ERR, ERR, OPR], # edo 7 - primero operador operacional
       [OPR, ERR, OPR, ERR,   4, OPR, 4, OPR, ERR, ERR, ERR, ERR, ERR, OPR], # edo 8 - operador relacional
-      [ERR, IDE, IDE, IDE,   4, IDE, 4, IDE, IDE, IDE, IDE, IDE, IDE,   9], # edo 9 - identificador
+      [IDE, IDE, IDE, IDE,   4, IDE, 4, IDE, IDE, IDE, IDE, IDE, IDE,   9], # edo 9 - identificador
       [ERR, ERR, ERR, ERR,   4, ERR, 4, ERR, ERR, OPR, ERR, ERR, ERR, ERR]] # edo 10 - !=
 # Filtro de caracteres: regresa el número de columna de la matriz de transiciones
 # de acuerdo al caracter dado
