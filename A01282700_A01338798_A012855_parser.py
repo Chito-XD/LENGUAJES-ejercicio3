@@ -16,42 +16,50 @@
 
 
 import sys
-import obten_token as scanner
+from A01282700_A01338798_A012855_obtener_token import (
+    obten_token,
+    END, 
+    FLT, 
+    INT, 
+    LRP, 
+    OPB, 
+    RRP
+)
 
 # Empata y obtiene el siguiente token
 def match(tokenEsperado):
     global token
     if token == tokenEsperado:
-        token = scanner.obten_token()
+        token = obten_token()
     else:
         error("token equivocado")
 
 # Función principal: implementa el análisis sintáctico
 def parser():
     global token 
-    token = scanner.obten_token() # inicializa con el primer token
+    token = obten_token() # inicializa con el primer token
     exp()
-    if token == scanner.END:
+    if token == END:
         print("Expresion bien construida!!")
     else:
         error("expresion mal terminada")
 
 # Módulo que reconoce expresiones
 def exp():
-    if token == scanner.INT or token == scanner.FLT:
+    if token == INT or token == FLT:
         match(token) # reconoce Constantes
         exp1()
-    elif token == scanner.LRP:
+    elif token == LRP:
         match(token) # reconoce Delimitador (
         exp()
-        match(scanner.RRP)
+        match(RRP)
         exp1()
     else:
         error("expresion mal iniciada")
 
 # Módulo auxiliar para reconocimiento de expresiones
 def exp1():
-    if token == scanner.OPB:
+    if token == OPB:
         match(token) # reconoce operador
         exp()
         exp1()
@@ -62,3 +70,4 @@ def error(mensaje):
     sys.exit(1)
     
         
+parser()
