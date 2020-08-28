@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
 
-# Implementación de un scanner mediante la codificación de un Autómata
-# Finito Determinista como una Matríz de Transiciones
-# Autor: Dr. Santiago Conant, Agosto 2014 (modificado en Agosto 2015)
 
 # INTEGRANTES
 # Luis Alberto Caballero Noguez A01282700
