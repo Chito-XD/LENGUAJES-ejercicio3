@@ -18,12 +18,18 @@
 import sys
 from A01282700_A01338798_A012855_obtener_token import (
     obten_token,
-    END, 
-    FLT, 
     INT, 
-    LRP, 
-    OPB, 
-    RRP
+    FLT,
+    OPB,
+    LRP,
+    RRP,
+    END,
+    LOC,
+    ROC,
+    OPA,
+    OPR,
+    IDE,
+    ERR
 )
 
 # Empata y obtiene el siguiente token
