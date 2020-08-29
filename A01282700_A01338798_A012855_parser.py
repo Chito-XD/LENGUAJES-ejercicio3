@@ -31,16 +31,13 @@ def match(tokenEsperado):
     global token
 
     # print('----')
-    print(f"token {token}")
-    print(f"token esperado {tokenEsperado}")
-    print('----')
+    # print(f"token {token}")
+    # print(f"token esperado {tokenEsperado}")
+    # print('----')
 
     if token == tokenEsperado:
         token = obten_token()
     else:
-        # print("error")
-        # print(token)
-        # print(tokenEsperado)
         error("token equivocado")
         
 
@@ -89,14 +86,20 @@ def Mat1():
 
 # Módulo que reconoce expresiones
 def Cond():
-    Arit()
-    match(OPR) # match con operador relacional
-    Mat()
-    match(LOC) # match con delimitador ?
-    Mat()
-    match(ROC) # match con delimitador :
-    Mat()
-    Cond1()
+    # Arit()
+    # match(OPR) # match con operador relacional
+    # Mat()
+    # match(LOC) # match con delimitador ?
+    # Mat()
+    # match(ROC) # match con delimitador :
+    # Mat()
+    # Cond1()
+    if token == LOC or token == ROC:
+        match(token)
+        Arit()
+        match(ROC)
+        Arit()
+
 
 # Módulo que reconoce expresiones
 def Cond1():
@@ -120,17 +123,21 @@ def Arit():
     elif token == LRP:
         match(token) # match con delimitador (
         Arit()
-        match(RRP) # match con delimitador )
+        
         Arit1()
+        match(RRP) # match con delimitador )
     else:
         print(token)
         error("Expresion mal hecha 4")
 
 def Arit1():
-    if token == OPB:
+    if token == OPB or token == OPR:
         match(token) # match con operador binario
         Arit()
         Arit1()
+    if token == LOC or token == ROC:
+        Cond()
+
     # else:
     #     print(token)
     #     error("Expresion mal hecha 5")
