@@ -1,14 +1,19 @@
-# Implementación de un parser
-# Reconoce expresiones mediante la gramática:
-# EXP -> EXP op EXP | EXP -> (EXP) | cte
-# la cual fué modificada para eliminar ambigüedad a:
-# EXP  -> cte EXP1 | (EXP) EXP1
-# EXP1 -> op EXP EXP1 | vacío
-# los elementos léxicos (delimitadores, constantes y operadores)
-# son reconocidos por el scanner
-#
-# Autor: Dr. Santiago Conant, Agosto 2014 (modificado Agosto 2015)
 
+# INTEGRANTES
+# Luis Alberto Caballero Noguez A01282700
+# Edgar Rubén Salazar Lugo A01338798
+# Diego Alejandro Villarreal Lopez A01282555
+
+# ASIG = IDE = ( MAT )
+# MAT = ARIT MAT1
+# MAT1 = opr MAT ? MAT Cond1 | e
+# cond = ARIT : ARIT
+# Cond1 = opr MAT ? MAT : MAT COND1 | e
+# ARIT = cte ARIT1 | ( ARIT ) ARIT1
+# ARIT1 = opr ARIT ARIT1 | e
+
+
+# Gramáticas
 import sys
 from A01282700_A01338798_A012855_obtener_token import (
     obten_token,
@@ -22,25 +27,18 @@ from A01282700_A01338798_A012855_obtener_token import (
     ROC,
     OPA,
     OPR,
-    IDE,
-    ERR
+    IDE
 )
 
 # Empata y obtiene el siguiente token
 def match(tokenEsperado):
     global token
 
-    # print('----')
-    # print(f"token {token}")
-    # print(f"token esperado {tokenEsperado}")
-    # print('----')
-
     if token == tokenEsperado:
         token = obten_token()
     else:
         error("token equivocado")
         
-
 # Función principal: implementa el análisis sintáctico
 def parser():
     global token 
@@ -81,27 +79,16 @@ def Mat1():
         match(ROC) # match con operador :
         Mat()
         Cond1()
-    # else:
-    #     error("Expresion mal hecha 2")
 
-# Módulo que reconoce expresiones
+# Módulo que reconoce expresiones condicionales
 def Cond():
-    # Arit()
-    # match(OPR) # match con operador relacional
-    # Mat()
-    # match(LOC) # match con delimitador ?
-    # Mat()
-    # match(ROC) # match con delimitador :
-    # Mat()
-    # Cond1()
     if token == LOC or token == ROC:
         match(token)
         Arit()
         match(ROC)
         Arit()
 
-
-# Módulo que reconoce expresiones
+# Módulo auxiñiar que reconoce expresiones condicionales
 def Cond1():
     if token == OPR:
         match(token) # match con operador relacional
@@ -111,12 +98,9 @@ def Cond1():
         match(ROC) # match con delimitador :
         Mat()
         Cond1()
-    # else:
-    #     error("Expresion mal hecha 3")
 
-# Módulo que reconoce expresiones
+# Módulo que reconoce expresiones aritmeticas
 def Arit():
-
     if token == INT or token == FLT or token == IDE:
         match(token)
         Arit1()
@@ -130,6 +114,7 @@ def Arit():
         print(token)
         error("Expresion mal hecha 4")
 
+# modulo auxiliar que reconocer expresiones aritmeticas
 def Arit1():
     if token == OPB or token == OPR:
         match(token) # match con operador binario
@@ -137,10 +122,6 @@ def Arit1():
         Arit1()
     if token == LOC or token == ROC:
         Cond()
-
-    # else:
-    #     print(token)
-    #     error("Expresion mal hecha 5")
 
 # Termina con un mensaje de error
 def error(mensaje):
